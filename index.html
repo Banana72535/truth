@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Truth</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 24px;
+        }
+        .clickable-truth {
+            text-decoration: underline;
+            cursor: pointer;
+            color: #ffffff;
+        }
+        
+        /* フェードアニメーションの設定（0.8秒かけてじわっと変化） */
+        #text-container {
+            transition: opacity 0.8s ease;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="text-container">
+        The <span class="clickable-truth" onclick="changeText()">truth</span> is right there.
+    </div>
+
+    <script>
+        function changeText() {
+            const container = document.getElementById('text-container');
+            
+            // 1. まず文字を透明（非表示）にする
+            container.style.opacity = 0;
+            
+            // 2. 透明になった瞬間（0.8秒後）に文字を切り替えて、再びじわっと表示する
+            setTimeout(() => {
+                container.innerText = "I think the number two is both convenient and beautiful.";
+                container.style.opacity = 1;
+            }, 800); // 800ミリ秒＝0.8秒
+        }
+    </script>
+
+</body>
+</html>
