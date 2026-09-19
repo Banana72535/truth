@@ -24,7 +24,6 @@
             color: #ffffff;
         }
         
-        /* 画面全体のフェード用設定 */
         #text-container {
             transition: opacity 0.8s ease;
             opacity: 1;
@@ -36,7 +35,6 @@
             align-items: center;
         }
 
-        /* 入力画面のコンテンツ配置 */
         .password-form {
             display: flex;
             flex-direction: column;
@@ -85,7 +83,6 @@
             opacity: 0.9;
         }
 
-        /* 🟢 流れる帯の設定 */
         .ticker-tape {
             background-color: rgba(0, 20, 0, 0.8);
             color: #00ff00;
@@ -127,7 +124,6 @@
             100% { transform: translateX(0); }
         }
 
-        /* 最終テキストの表示エリア */
         .final-text {
             max-width: 80%;
             line-height: 1.6;
@@ -148,7 +144,6 @@
         const bin = "110111010101001100000001010111000001000100010000011101000100101010111001011010011001101100100001010101101111000000001110101110001001010111010010100110010101110000101010001100110000111011101011000111011110110011001111010000111110110011011110001011110101001011101100001001000011110110101101000010011010110000101111111111111111111";
         const tapeContent = `<div class="ticker-wrap"><span>${bin}</span><span>${bin}</span></div>`;
 
-        // 1. truthを押したとき
         function goToPasswordPage() {
             container.style.opacity = 0;
             
@@ -171,7 +166,6 @@
             }, 800);
         }
 
-        // 2. Confirmedを押したとき
         function checkPassword() {
             const inputPass = document.getElementById('pass-field').value.trim();
             
@@ -179,7 +173,7 @@
                 container.style.opacity = 0;
                 
                 setTimeout(() => {
-                    // 💡 修正：あなたの思い通りの英語メッセージに変更しました！
+                    // 数学はあまりにもうまくできすぎている……のメッセージです
                     container.innerHTML = `<div class="final-text">Mathematics is just *too* perfectly made. It’s eerie, and beautiful. But it’s so embarrassing to write something that sounds like it’s trying to be deep (lol). Anyway, this isn't the absolute truth—it’s just my personal thoughts ;_;</div>`;
                     container.style.opacity = 1;
                 }, 800);
