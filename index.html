@@ -15,6 +15,8 @@
             height: 100vh;
             margin: 0;
             font-size: 24px;
+            overflow: hidden;
+            position: relative;
         }
         .clickable-truth {
             text-decoration: underline;
@@ -22,31 +24,168 @@
             color: #ffffff;
         }
         
-        /* フェードアニメーションの設定（0.8秒かけてじわっと変化） */
+        /* 画面全体のフェード用設定 */
         #text-container {
             transition: opacity 0.8s ease;
             opacity: 1;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 入力画面のコンテンツ配置 */
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .instruction-text {
+            font-size: 18px;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+            z-index: 100;
+            max-width: 80%;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
+
+        .password-input {
+            font-size: 20px;
+            padding: 8px 12px;
+            background-color: #111;
+            color: #fff;
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            text-align: center;
+            width: 280px;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 1);
+        }
+        .confirm-btn {
+            font-size: 18px;
+            padding: 10px 24px;
+            background-color: #00ff00;
+            color: #000000;
+            border: 2px solid #00ff00;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 1);
+        }
+        .confirm-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 🟢 流れる帯の設定 */
+        .ticker-tape {
+            background-color: rgba(0, 20, 0, 0.8);
+            color: #00ff00;
+            position: absolute;
+            overflow: hidden;
+            white-space: nowrap;
+            font-family: monospace;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+            z-index: 1;
+        }
+        
+        .tape-1 { top: 10%; left: -15%; width: 140%; transform: rotate(15deg); padding: 12px 0; font-size: 20px; }
+        .tape-2 { bottom: 15%; left: -15%; width: 140%; transform: rotate(-20deg); padding: 6px 0; font-size: 12px; }
+        .tape-3 { top: -20%; left: 20%; width: 150vh; transform: rotate(90deg); transform-origin: left top; padding: 8px 0; font-size: 14px; }
+        .tape-4 { top: -10%; right: 15%; width: 150vh; transform: rotate(95deg); transform-origin: right top; padding: 4px 0; font-size: 10px; }
+        .tape-5 { top: 45%; left: -10%; width: 130%; transform: rotate(-5deg); padding: 16px 0; font-size: 24px; }
+        .tape-6 { bottom: 40%; left: -10%; width: 130%; transform: rotate(45deg); padding: 22px 0; font-size: 32px; }
+        
+        .ticker-wrap {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .move-left-fast { animation: loop-left 6s linear infinite; }
+        .move-left-normal { animation: loop-left 11s linear infinite; }
+        .move-left-slow { animation: loop-left 22s linear infinite; }
+
+        .move-right-fast { animation: loop-right 7s linear infinite; }
+        .move-right-normal { animation: loop-right 13s linear infinite; }
+        .move-right-slow { animation: loop-right 17s linear infinite; }
+
+        @keyframes loop-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes loop-right {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* 最終テキストの表示エリア */
+        .final-text {
+            max-width: 80%;
+            line-height: 1.6;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
     <div id="text-container">
-        The <span class="clickable-truth" onclick="changeText()">truth</span> is right there.
+        The &nbsp;<span class="clickable-truth" onclick="goToPasswordPage()">truth</span>&nbsp; is right there.
     </div>
 
     <script>
-        function changeText() {
-            const container = document.getElementById('text-container');
-            
-            // 1. まず文字を透明（非表示）にする
+        const container = document.getElementById('text-container');
+
+        const bin = "110111010101001100000001010111000001000100010000011101000100101010111001011010011001101100100001010101101111000000001110101110001001010111010010100110010101110000101010001100110000111011101011000111011110110011001111010000111110110011011110001011110101001011101100001001000011110110101101000010011010110000101111111111111111111";
+        const tapeContent = `<div class="ticker-wrap"><span>${bin}</span><span>${bin}</span></div>`;
+
+        // 1. truthを押したとき
+        function goToPasswordPage() {
             container.style.opacity = 0;
             
-            // 2. 透明になった瞬間（0.8秒後）に文字を切り替えて、再びじわっと表示する
             setTimeout(() => {
-                container.innerText = "I think the number two is both convenient and beautiful.";
+                container.innerHTML = `
+                    <div class="password-form">
+                        <div class="ticker-tape tape-1"><div class="move-left-fast">${tapeContent}</div></div>
+                        <div class="ticker-tape tape-2"><div class="move-right-slow">${tapeContent}</div></div>
+                        <div class="ticker-tape tape-3"><div class="move-left-slow">${tapeContent}</div></div>
+                        <div class="ticker-tape tape-4"><div class="move-right-fast">${tapeContent}</div></div>
+                        <div class="ticker-tape tape-5"><div class="move-left-normal">${tapeContent}</div></div>
+                        <div class="ticker-tape tape-6"><div class="move-right-normal">${tapeContent}</div></div>
+
+                        <div class="instruction-text">The program is corrupted.<br>Enter the corrupted part to restore it.</div>
+                        <input type="text" id="pass-field" class="password-input" placeholder="Enter here...">
+                        <button class="confirm-btn" onclick="checkPassword()">Confirmed</button>
+                    </div>
+                `;
                 container.style.opacity = 1;
-            }, 800); // 800ミリ秒＝0.8秒
+            }, 800);
+        }
+
+        // 2. Confirmedを押したとき
+        function checkPassword() {
+            const inputPass = document.getElementById('pass-field').value.trim();
+            
+            if (inputPass === "10011110111100101") {
+                container.style.opacity = 0;
+                
+                setTimeout(() => {
+                    // 💡 修正：あなたの思い通りの英語メッセージに変更しました！
+                    container.innerHTML = `<div class="final-text">Mathematics is just *too* perfectly made. It’s eerie, and beautiful. But it’s so embarrassing to write something that sounds like it’s trying to be deep (lol). Anyway, this isn't the absolute truth—it’s just my personal thoughts ;_;</div>`;
+                    container.style.opacity = 1;
+                }, 800);
+            } else {
+                alert("Invalid Corrupted Program.");
+            }
         }
     </script>
 
